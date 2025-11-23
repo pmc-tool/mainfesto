@@ -90,9 +90,11 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
       >
         <div className="flex flex-col h-full overflow-hidden">
           <div className="p-6 flex items-center justify-center border-b border-gray-200 flex-shrink-0">
-            <div className="w-24 h-24 bg-gradient-to-br from-uwp-primary to-green-700 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-2xl">UWP</span>
-            </div>
+            <img
+              src="/uwp-final.png"
+              alt="United Workers Party Logo"
+              className="w-32 h-32 object-contain"
+            />
           </div>
 
           <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">

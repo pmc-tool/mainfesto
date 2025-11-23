@@ -108,9 +108,11 @@ export const ManifestoReader = () => {
             {/* Mobile: Center - Logo or View mode buttons */}
             <div className="lg:hidden flex-1 flex items-center justify-center">
               {!isScrolled ? (
-                <div className="w-10 h-10 bg-gradient-to-br from-uwp-primary to-green-700 rounded-full flex items-center justify-center shadow-md">
-                  <span className="text-white font-bold text-sm">UWP</span>
-                </div>
+                <img
+                  src="/uwp-final.png"
+                  alt="United Workers Party Logo"
+                  className="h-10 w-auto object-contain"
+                />
               ) : (
                 <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
                   <button

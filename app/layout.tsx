@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: 'UWP Manifesto Reader',
   description: 'Read the UWP 78-page manifesto with full search and navigation capabilities',
   keywords: ['UWP', 'manifesto', 'politics', 'policy', 'document reader'],
+  icons: {
+    icon: '/uwp-final.png',
+    apple: '/uwp-final.png',
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +35,7 @@ export default function RootLayout({
   data-secondary-color="#FFEB3C"
   data-button-background-color="transparent"
   data-starting-message="Hello! How can I help you today?"
-  data-logo="https://i.imgur.com/jiVwxkL.png"
+  data-logo="/uwp-final.png"
   data-user-message-bg-color="#d1fae5"
   data-bot-message-bg-color="#fef3c7">
 </script>
