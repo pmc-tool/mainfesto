@@ -94,6 +94,17 @@ export const ManifestoReader = () => {
       <div className="flex-1 flex flex-col relative">
         <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
           <div className="px-4 py-3 flex items-center justify-between">
+            {/* Desktop: Logo when sidebar closed */}
+            {!isContextOpen && (
+              <div className="hidden lg:block">
+                <img
+                  src="/uwp-final.png"
+                  alt="United Workers Party Logo"
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
+            )}
+
             {/* Mobile: Hamburger */}
             <button
               onClick={() => setIsContextOpen(!isContextOpen)}
