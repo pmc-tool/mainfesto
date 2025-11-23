@@ -41,51 +41,6 @@
     margin-right: auto;
   }
 
-  /* Flipbook specific styles - real page flip experience */
-  .flipbook-container-wrapper {
-    /* Isolated flipbook main wrapper */
-  }
-
-  .flipbook-main {
-    /* Isolated flipbook book container */
-  }
-
-  .flipbook-element {
-    /* HTMLFlipBook element styles */
-  }
-
-  .flipbook-page-wrapper {
-    /* Individual page wrapper */
-    width: 100%;
-    height: 100%;
-  }
-
-  .flipbook-page-content {
-    /* Page content container */
-    width: 100%;
-    height: 100%;
-  }
-
-  .flipbook-loading {
-    /* Loading state container */
-  }
-
-  .flipbook-controls {
-    /* Navigation controls wrapper */
-  }
-
-  .flipbook-nav-btn {
-    /* Navigation button base styles */
-  }
-
-  .flipbook-footer {
-    /* Footer with counter and instructions */
-  }
-
-  .flipbook-counter {
-    /* Page counter badge */
-  }
-
   /* Smooth scroll container */
   .scroll-container {
     scroll-behavior: smooth;
@@ -155,41 +110,4 @@
     }
   }
 
-  /* Chatbot message styling - AI messages yellow, human messages green */
-  /* AI/Bot messages */
-  [class*="message"][class*="bot"],
-  [class*="message"][class*="assistant"],
-  [class*="bot-message"],
-  [class*="ai-message"],
-  div[class*="message"]:not([class*="user"]):not([class*="human"]) {
-    background-color: #fef3c7 !important; /* yellow-100 */
-  }
-
-  /* Human/User messages */
-  [class*="message"][class*="user"],
-  [class*="message"][class*="human"],
-  [class*="user-message"],
-  [class*="human-message"] {
-    background-color: #d1fae5 !important; /* green-100 */
-  }
-
-  /* Alternative selectors for common chatbot widget patterns */
-  iframe[src*="chatbot"] {
-    /* Inject styles into iframe content if accessible */
-  }
-
-  /* For widgets that use data attributes or specific structures */
-  [data-message-type="bot"],
-  [data-message-type="assistant"],
-  [data-sender="bot"],
-  [data-sender="assistant"] {
-    background-color: #fef3c7 !important;
-  }
-
-  [data-message-type="user"],
-  [data-message-type="human"],
-  [data-sender="user"],
-  [data-sender="human"] {
-    background-color: #d1fae5 !important;
-  }
 }
