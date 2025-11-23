@@ -44,37 +44,22 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   // Calculate maximum book dimensions - fill screen completely
   useEffect(() => {
     const updateDimensions = () => {
-      // Use nearly full height - only leave room for header and bottom bar
+      // Use full available height - minimal spacing for header and bottom bar
       const headerHeight = 60;
-      const bottomBarHeight = 72;
-      const verticalPadding = 10; // Minimal padding
+      const bottomBarHeight = 60; // Reduced from 72
+      const verticalPadding = 5; // Minimal padding
       const maxHeight = window.innerHeight - headerHeight - bottomBarHeight - verticalPadding;
 
-      // Use nearly full width - minimal margins
-      const horizontalMargin = 20; // Very minimal margins
+      // Use full width - absolute minimal margins
+      const horizontalMargin = 10; // Reduced from 20
       const totalAvailableWidth = window.innerWidth - horizontalMargin;
       const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
 
-      // Use A4-like aspect ratio (1:1.414)
-      const heightBasedWidth = maxHeight / 1.414;
-      const widthBasedHeight = maxWidthPerPage * 1.414;
-
-      let finalWidth, finalHeight;
-
-      // Use whichever gives larger book while respecting aspect ratio
-      if (heightBasedWidth <= maxWidthPerPage) {
-        // Can use full height
-        finalHeight = maxHeight;
-        finalWidth = heightBasedWidth;
-      } else {
-        // Width is limiting factor
-        finalWidth = maxWidthPerPage;
-        finalHeight = widthBasedHeight;
-      }
-
+      // Simply use the calculated dimensions without strict aspect ratio constraints
+      // This allows the book to fill the available space more freely
       setDimensions({
-        width: Math.floor(finalWidth),
-        height: Math.floor(finalHeight)
+        width: Math.floor(maxWidthPerPage),
+        height: Math.floor(maxHeight)
       });
     };
 
@@ -209,7 +194,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden p-1">
+    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden">
       {/* Main Book Container */}
       <div className="flipbook-book-wrapper relative flex items-center justify-center flex-1 w-full max-w-full">
         <HTMLFlipBook
@@ -217,10 +202,10 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
           width={dimensions.width}
           height={dimensions.height}
           size="stretch"
-          minWidth={300}
-          maxWidth={2000}
-          minHeight={400}
-          maxHeight={2000}
+          minWidth={200}
+          maxWidth={4000}
+          minHeight={300}
+          maxHeight={4000}
           showCover={true}
           flippingTime={800}
           usePortrait={false}
@@ -273,31 +258,31 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       </div>
 
       {/* Compact Bottom Bar with Page Info */}
-      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-4 py-2 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm">
-          <div className="flex items-center gap-3">
-            <div className="bg-uwp-primary px-4 py-1.5 rounded-full">
-              <span className="text-white font-bold">
+      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-3 py-1.5 border-t border-white/10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <div className="bg-uwp-primary px-3 py-1 rounded-full">
+              <span className="text-white font-bold text-xs">
                 {currentPage + 1} / {numPages}
               </span>
             </div>
             <span className="text-gray-300 text-xs hidden md:inline">
-              Click corners or use arrows • Drag to turn pages
+              Click corners or drag to turn
             </span>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             <button
               onClick={goToPreviousPage}
               disabled={currentPage === 0}
-              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
             >
               ← Prev
             </button>
             <button
               onClick={goToNextPage}
               disabled={currentPage >= numPages - 1}
-              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
+              className="px-2.5 py-1 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
             >
               Next →
             </button>
