@@ -125,19 +125,24 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
             {!isSearching && (
               <div>
                 <nav className="space-y-1">
-                  {tableOfContents.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleItemClick(item.page)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors text-sm ${
-                        activePage === item.page
-                          ? 'bg-uwp-primary text-white'
-                          : 'hover:bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      <span className="leading-tight">{item.title}</span>
-                    </button>
-                  ))}
+                  {tableOfContents.map((item, index) => {
+                    const nextItem = tableOfContents[index + 1];
+                    const isActive = activePage >= item.page && (!nextItem || activePage < nextItem.page);
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleItemClick(item.page)}
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-colors text-sm ${
+                          isActive
+                            ? 'bg-uwp-primary text-white'
+                            : 'hover:bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        <span className="leading-tight">{item.title}</span>
+                      </button>
+                    );
+                  })}
                 </nav>
               </div>
             )}
