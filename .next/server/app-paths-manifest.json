@@ -1,3 +1,5 @@
 {
-  "/manifesto/page": "app/manifesto/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/manifesto/page": "app/manifesto/page.js",
+  "/test-pdf/page": "app/test-pdf/page.js"
 }
