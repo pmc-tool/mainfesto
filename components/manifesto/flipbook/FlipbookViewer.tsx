@@ -209,101 +209,42 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden p-1">
-      {/* Main Book Container */}
-      <div className="flipbook-book-wrapper relative flex items-center justify-center flex-1 w-full max-w-full">
-        <HTMLFlipBook
-          ref={flipBookRef}
-          width={dimensions.width}
-          height={dimensions.height}
-          size="stretch"
-          minWidth={300}
-          maxWidth={3000}
-          minHeight={400}
-          maxHeight={3000}
-          showCover={true}
-          flippingTime={800}
-          usePortrait={false}
-          startPage={0}
-          drawShadow={true}
-          className="flipbook-book-element"
-          style={{}}
-          startZIndex={0}
-          autoSize={false}
-          maxShadowOpacity={0.8}
-          mobileScrollSupport={false}
-          onFlip={handleFlip}
-          useMouseEvents={true}
-          swipeDistance={50}
-          clickEventForward={true}
-          showPageCorners={true}
-          disableFlipByClick={false}
-        >
-          {Array.from({ length: numPages }, (_, i) => i + 1).map((pageNum) => (
-            <div key={pageNum} className="flipbook-single-page">
-              <FlipbookPage
-                imageUrl={pageImages.get(pageNum) || null}
-              />
-            </div>
-          ))}
-        </HTMLFlipBook>
-
-        {/* Compact Navigation Arrows */}
-        <button
-          onClick={goToPreviousPage}
-          disabled={currentPage === 0}
-          className="flipbook-arrow-left absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-black/60 hover:bg-black/80 disabled:opacity-20 disabled:cursor-not-allowed p-3 rounded-full backdrop-blur-sm transition-all hover:scale-105 border border-white/20"
-          aria-label="Previous page"
-        >
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage >= numPages - 1}
-          className="flipbook-arrow-right absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-black/60 hover:bg-black/80 disabled:opacity-20 disabled:cursor-not-allowed p-3 rounded-full backdrop-blur-sm transition-all hover:scale-105 border border-white/20"
-          aria-label="Next page"
-        >
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Compact Bottom Bar with Page Info */}
-      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-4 py-2 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm">
-          <div className="flex items-center gap-3">
-            <div className="bg-uwp-primary px-4 py-1.5 rounded-full">
-              <span className="text-white font-bold">
-                {currentPage + 1} / {numPages}
-              </span>
-            </div>
-            <span className="text-gray-300 text-xs hidden md:inline">
-              Click corners or use arrows • Drag to turn pages
-            </span>
+    <div className="flipbook-fullscreen-container flex-1 flex items-center justify-center bg-black overflow-hidden">
+      <HTMLFlipBook
+        ref={flipBookRef}
+        width={dimensions.width}
+        height={dimensions.height}
+        size="stretch"
+        minWidth={300}
+        maxWidth={3000}
+        minHeight={400}
+        maxHeight={3000}
+        showCover={true}
+        flippingTime={800}
+        usePortrait={false}
+        startPage={0}
+        drawShadow={true}
+        className="flipbook-book-element"
+        style={{}}
+        startZIndex={0}
+        autoSize={false}
+        maxShadowOpacity={0.8}
+        mobileScrollSupport={false}
+        onFlip={handleFlip}
+        useMouseEvents={true}
+        swipeDistance={50}
+        clickEventForward={true}
+        showPageCorners={true}
+        disableFlipByClick={false}
+      >
+        {Array.from({ length: numPages }, (_, i) => i + 1).map((pageNum) => (
+          <div key={pageNum} className="flipbook-single-page">
+            <FlipbookPage
+              imageUrl={pageImages.get(pageNum) || null}
+            />
           </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={goToPreviousPage}
-              disabled={currentPage === 0}
-              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
-            >
-              ← Prev
-            </button>
-            <button
-              onClick={goToNextPage}
-              disabled={currentPage >= numPages - 1}
-              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-      </div>
+        ))}
+      </HTMLFlipBook>
     </div>
   );
 };
