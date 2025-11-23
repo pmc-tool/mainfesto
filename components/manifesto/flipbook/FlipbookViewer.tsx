@@ -36,7 +36,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   const [loadedChunks, setLoadedChunks] = useState<Set<number>>(new Set());
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const flipBookRef = useRef<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 1000 });
+  const [dimensions, setDimensions] = useState({ width: 1200, height: 1600 });
 
   const CHUNK_SIZE = 4;
   const INITIAL_LOAD = 4; // Load first 4 pages immediately
@@ -55,26 +55,26 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       const totalAvailableWidth = window.innerWidth - horizontalMargin;
       const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
 
-      // Use A4-like aspect ratio (1:1.414)
+      // Use A4-like aspect ratio (1:1.414) but prioritize size
       const heightBasedWidth = maxHeight / 1.414;
       const widthBasedHeight = maxWidthPerPage * 1.414;
 
       let finalWidth, finalHeight;
 
-      // Use whichever gives larger book while respecting aspect ratio
-      if (heightBasedWidth <= maxWidthPerPage) {
-        // Can use full height
-        finalHeight = maxHeight;
-        finalWidth = heightBasedWidth;
-      } else {
-        // Width is limiting factor
+      // Use whichever gives LARGER book while respecting aspect ratio
+      if (widthBasedHeight <= maxHeight) {
+        // Width is NOT limiting - use full width
         finalWidth = maxWidthPerPage;
         finalHeight = widthBasedHeight;
+      } else {
+        // Height is limiting - use full height
+        finalHeight = maxHeight;
+        finalWidth = heightBasedWidth;
       }
 
       setDimensions({
-        width: Math.floor(finalWidth),
-        height: Math.floor(finalHeight)
+        width: Math.floor(finalWidth * 1.5),
+        height: Math.floor(finalHeight * 1.5)
       });
     };
 
@@ -218,9 +218,9 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
           height={dimensions.height}
           size="stretch"
           minWidth={300}
-          maxWidth={2000}
+          maxWidth={5000}
           minHeight={400}
-          maxHeight={2000}
+          maxHeight={5000}
           showCover={true}
           flippingTime={800}
           usePortrait={false}
