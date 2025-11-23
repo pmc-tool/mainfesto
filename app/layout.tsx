@@ -31,8 +31,47 @@ export default function RootLayout({
   data-secondary-color="#FFEB3C"
   data-button-background-color="transparent"
   data-starting-message="Hello! How can I help you today?"
-  data-logo="https://i.imgur.com/jiVwxkL.png">
+  data-logo="https://i.imgur.com/jiVwxkL.png"
+  data-user-message-bg-color="#d1fae5"
+  data-bot-message-bg-color="#fef3c7">
 </script>
+
+        {/* Custom styling for chatbot messages */}
+        <script dangerouslySetInnerHTML={{__html: `
+          (function() {
+            function styleMessages() {
+              // Try to access chatbot widget elements
+              const chatContainer = document.querySelector('[class*="chat"]');
+              if (!chatContainer) return;
+
+              // Style AI/Bot messages
+              const botMessages = chatContainer.querySelectorAll('[class*="bot"], [class*="assistant"], [data-sender="bot"], [data-sender="assistant"]');
+              botMessages.forEach(msg => {
+                msg.style.backgroundColor = '#fef3c7';
+              });
+
+              // Style User/Human messages
+              const userMessages = chatContainer.querySelectorAll('[class*="user"], [class*="human"], [data-sender="user"], [data-sender="human"]');
+              userMessages.forEach(msg => {
+                msg.style.backgroundColor = '#d1fae5';
+              });
+            }
+
+            // Run when DOM is ready and periodically to catch new messages
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', styleMessages);
+            } else {
+              styleMessages();
+            }
+
+            // Monitor for new messages
+            setInterval(styleMessages, 1000);
+
+            // Also watch for DOM mutations
+            const observer = new MutationObserver(styleMessages);
+            observer.observe(document.body, { childList: true, subtree: true });
+          })();
+        `}} />
       </body>
     </html>
   );
