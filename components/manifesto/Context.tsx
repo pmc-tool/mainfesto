@@ -147,14 +147,16 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
         {/* Collapse/Expand Button */}
         <button
           onClick={onToggle}
-          className={`hidden lg:flex absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 z-50 w-8 h-16 bg-white border border-gray-300 rounded-r-lg shadow-md items-center justify-center hover:bg-gray-50 transition-all ${
-            isOpen ? '' : 'translate-x-0'
+          className={`hidden lg:flex absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 z-50 w-8 h-16 rounded-r-lg shadow-md items-center justify-center transition-all ${
+            isOpen
+              ? 'bg-yellow-400 hover:bg-yellow-500 border border-yellow-500'
+              : 'bg-uwp-primary hover:bg-green-700 border border-green-700 translate-x-0'
           }`}
           aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           title={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
           <svg
-            className={`w-4 h-4 text-gray-700 transition-transform duration-300 ${
+            className={`w-4 h-4 text-white transition-transform duration-300 ${
               isOpen ? 'rotate-0' : 'rotate-180'
             }`}
             fill="none"
