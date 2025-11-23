@@ -156,8 +156,8 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
           title={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
           <svg
-            className={`w-4 h-4 text-white transition-transform duration-300 ${
-              isOpen ? 'rotate-0' : 'rotate-180'
+            className={`w-4 h-4 transition-transform duration-300 ${
+              isOpen ? 'rotate-0 text-white' : 'rotate-180 text-green-900'
             }`}
             fill="none"
             stroke="currentColor"
