@@ -41,30 +41,32 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   const CHUNK_SIZE = 4;
   const INITIAL_LOAD = 4; // Load first 4 pages immediately
 
-  // Calculate full-screen book dimensions - 80% of canvas
+  // Calculate maximum book dimensions for readability
   useEffect(() => {
     const updateDimensions = () => {
-      // Use 80% of available height (minus header and bottom bar)
-      const totalAvailableHeight = window.innerHeight - 180; // header + bottom bar
-      const targetHeight = totalAvailableHeight * 0.85; // 85% for better coverage
+      // Maximum height - use almost full screen minus header and bottom bar
+      const totalAvailableHeight = window.innerHeight - 140; // Minimal spacing
+      const maxHeight = totalAvailableHeight * 0.95; // 95% coverage
 
-      // Calculate available width
-      const availableWidth = window.innerWidth - 100; // Small margins
+      // Maximum width - use full width with minimal margins
+      const totalAvailableWidth = window.innerWidth - 50; // Very small margins
+      const maxWidthPerPage = (totalAvailableWidth * 0.95) / 2; // 95% coverage, split for 2 pages
 
       // Use A4-like aspect ratio (1:1.414)
-      const heightBasedWidth = targetHeight / 1.414;
+      const heightBasedWidth = maxHeight / 1.414;
+      const widthBasedHeight = maxWidthPerPage * 1.414;
 
       let finalWidth, finalHeight;
 
-      // Prioritize height to use more vertical space
-      if (heightBasedWidth * 2 <= availableWidth * 0.85) {
-        // Height-based sizing fits within width
-        finalHeight = targetHeight;
+      // Use whichever gives larger book while respecting aspect ratio
+      if (heightBasedWidth <= maxWidthPerPage) {
+        // Can use full height
+        finalHeight = maxHeight;
         finalWidth = heightBasedWidth;
       } else {
-        // Width-constrained - scale down proportionally
-        finalWidth = (availableWidth * 0.85) / 2;
-        finalHeight = finalWidth * 1.414;
+        // Width is limiting factor
+        finalWidth = maxWidthPerPage;
+        finalHeight = widthBasedHeight;
       }
 
       setDimensions({
@@ -84,7 +86,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
 
     try {
       const page = await pdfProxy.getPage(pageNum);
-      const viewport = page.getViewport({ scale: 2.5 });
+      const viewport = page.getViewport({ scale: 3 }); // Higher quality for larger display
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
 
