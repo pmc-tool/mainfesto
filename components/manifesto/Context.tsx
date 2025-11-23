@@ -149,15 +149,15 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
           onClick={onToggle}
           className={`hidden lg:flex absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 z-50 w-8 h-16 rounded-r-lg shadow-md items-center justify-center transition-all ${
             isOpen
-              ? 'bg-yellow-400 hover:bg-yellow-500 border border-yellow-500'
-              : 'bg-uwp-primary hover:bg-green-700 border border-green-700 translate-x-0'
+              ? 'bg-white hover:bg-gray-50 border border-gray-300'
+              : 'bg-yellow-400 hover:bg-yellow-500 border border-yellow-500 translate-x-0'
           }`}
           aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           title={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
           <svg
             className={`w-4 h-4 transition-transform duration-300 ${
-              isOpen ? 'rotate-0 text-white' : 'rotate-180 text-green-900'
+              isOpen ? 'rotate-0 text-gray-700' : 'rotate-180 text-green-900'
             }`}
             fill="none"
             stroke="currentColor"
