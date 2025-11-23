@@ -95,11 +95,11 @@ export const ManifestoReader = () => {
 
       <div className="flex-1 flex flex-col relative">
         <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
-          <div className="px-4 py-3 flex items-center justify-between gap-4">
+          <div className="px-4 py-3 flex items-center justify-between">
             {/* Mobile: Hamburger */}
             <button
               onClick={() => setIsContextOpen(!isContextOpen)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Toggle menu"
             >
               <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,33 +107,7 @@ export const ManifestoReader = () => {
               </svg>
             </button>
 
-            {/* Display Mode Toggle (PDF/Flipbook) */}
-            <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
-              <button
-                onClick={() => setDisplayMode('pdf')}
-                className={`px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-colors ${
-                  displayMode === 'pdf'
-                    ? 'bg-uwp-primary text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-                aria-label="PDF view"
-              >
-                PDF
-              </button>
-              <button
-                onClick={() => setDisplayMode('flipbook')}
-                className={`px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-colors ${
-                  displayMode === 'flipbook'
-                    ? 'bg-uwp-primary text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-                aria-label="Flipbook view"
-              >
-                Flipbook
-              </button>
-            </div>
-
-            {/* Mobile: Center - Logo or View mode buttons (only show view mode in PDF mode) */}
+            {/* Mobile: Center - Logo or View mode buttons */}
             <div className="lg:hidden flex-1 flex items-center justify-center">
               {!isScrolled ? (
                 <img
@@ -141,7 +115,7 @@ export const ManifestoReader = () => {
                   alt="United Workers Party Logo"
                   className="h-10 w-auto object-contain"
                 />
-              ) : displayMode === 'pdf' ? (
+              ) : (
                 <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
                   <button
                     onClick={() => setViewMode('single')}
@@ -177,17 +151,43 @@ export const ManifestoReader = () => {
                     All
                   </button>
                 </div>
-              ) : (
-                <span className="text-sm text-gray-500">Flipbook Mode</span>
               )}
             </div>
 
             {/* Mobile: Right spacer to balance hamburger */}
-            <div className="lg:hidden w-10 flex-shrink-0"></div>
+            <div className="lg:hidden w-10"></div>
 
-            {/* Desktop: View mode buttons (only show in PDF mode) */}
-            {displayMode === 'pdf' && (
-              <div className="hidden lg:flex items-center gap-1 border border-gray-300 rounded-lg p-1 mx-auto">
+            {/* Desktop: Display Mode Toggle + View mode buttons */}
+            <div className="hidden lg:flex items-center gap-4 mx-auto">
+              {/* Display Mode Toggle (PDF/Flipbook) - Desktop Only */}
+              <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
+                <button
+                  onClick={() => setDisplayMode('pdf')}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                    displayMode === 'pdf'
+                      ? 'bg-uwp-primary text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  aria-label="PDF view"
+                >
+                  PDF
+                </button>
+                <button
+                  onClick={() => setDisplayMode('flipbook')}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                    displayMode === 'flipbook'
+                      ? 'bg-uwp-primary text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  aria-label="Flipbook view"
+                >
+                  Flipbook
+                </button>
+              </div>
+
+              {/* View mode buttons (only show in PDF mode) */}
+              {displayMode === 'pdf' && (
+                <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('single')}
                 className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
@@ -221,8 +221,9 @@ export const ManifestoReader = () => {
               >
                 All Pages
               </button>
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
