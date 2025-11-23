@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   description: 'Read the UWP 78-page manifesto with full search and navigation capabilities',
   keywords: ['UWP', 'manifesto', 'politics', 'policy', 'document reader'],
   icons: {
-    icon: '/uwp-final.png',
-    apple: '/uwp-final.png',
+    icon: '/fav-uwp.png',
+    apple: '/fav-uwp.png',
   },
 };
 
