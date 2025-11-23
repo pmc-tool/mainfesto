@@ -41,22 +41,30 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   const CHUNK_SIZE = 4;
   const INITIAL_LOAD = 4; // Load first 4 pages immediately
 
-  // Calculate full-screen book dimensions
+  // Calculate full-screen book dimensions - 80% of canvas
   useEffect(() => {
     const updateDimensions = () => {
-      const availableHeight = window.innerHeight - 120;
-      const availableWidth = (window.innerWidth - 400) / 2;
+      // Use 80% of available height (minus header and bottom bar)
+      const totalAvailableHeight = window.innerHeight - 180; // header + bottom bar
+      const targetHeight = totalAvailableHeight * 0.85; // 85% for better coverage
 
-      const heightBasedWidth = availableHeight / 1.414;
-      const widthBasedHeight = availableWidth * 1.414;
+      // Calculate available width
+      const availableWidth = window.innerWidth - 100; // Small margins
+
+      // Use A4-like aspect ratio (1:1.414)
+      const heightBasedWidth = targetHeight / 1.414;
 
       let finalWidth, finalHeight;
-      if (heightBasedWidth <= availableWidth) {
-        finalHeight = availableHeight;
+
+      // Prioritize height to use more vertical space
+      if (heightBasedWidth * 2 <= availableWidth * 0.85) {
+        // Height-based sizing fits within width
+        finalHeight = targetHeight;
         finalWidth = heightBasedWidth;
       } else {
-        finalWidth = availableWidth;
-        finalHeight = widthBasedHeight;
+        // Width-constrained - scale down proportionally
+        finalWidth = (availableWidth * 0.85) / 2;
+        finalHeight = finalWidth * 1.414;
       }
 
       setDimensions({
