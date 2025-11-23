@@ -19,9 +19,10 @@ interface PdfViewerProps {
   searchResults?: number[];
   viewMode: ViewMode;
   onPageClick?: (pageNumber: number) => void;
+  onViewModeChange?: (mode: ViewMode) => void;
 }
 
-export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = [], viewMode, onPageClick }: PdfViewerProps) => {
+export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = [], viewMode, onPageClick, onViewModeChange }: PdfViewerProps) => {
   const [pages, setPages] = useState<PDFPageProxy[]>([]);
 
   const handlePageClick = (pageNumber: number) => {
@@ -62,10 +63,49 @@ export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = 
   }
 
   return (
-    <div className="flex-1 overflow-auto">
+    <div className="flex-1 overflow-auto pdf-viewer-container">
       <div className="max-w-6xl mx-auto p-8">
-        <div className="mb-6">
+        {/* Mobile: Page indicator + View mode buttons */}
+        <div className="mb-6 flex items-center justify-between lg:block">
           <PageIndicator activePage={pageVisibility.activePage} totalPages={numPages} />
+
+          {onViewModeChange && (
+            <div className="flex lg:hidden items-center gap-1 border border-gray-300 rounded-lg p-1">
+              <button
+                onClick={() => onViewModeChange('single')}
+                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                  viewMode === 'single'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                aria-label="Single page view"
+              >
+                Single
+              </button>
+              <button
+                onClick={() => onViewModeChange('double')}
+                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                  viewMode === 'double'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                aria-label="Double page view"
+              >
+                Double
+              </button>
+              <button
+                onClick={() => onViewModeChange('all')}
+                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                  viewMode === 'all'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                aria-label="All pages view"
+              >
+                All
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="space-y-8">
