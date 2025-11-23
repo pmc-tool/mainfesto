@@ -26,7 +26,7 @@ export default function RootLayout({
         <ChatbotLabel />
 
         {/* UWP AI Chatbot Widget */}
-        <script async
+        {/* <script async
   src="https://thqi522cuv6kibxn6sbjajml.agents.do-ai.run/static/chatbot/widget.js"
   data-agent-id="72f2de28-c836-11f0-b074-4e013e2ddde4"
   data-chatbot-id="Yo1-CHReIBrXlRBDyrNNS7wULAuNKW70"
@@ -35,13 +35,26 @@ export default function RootLayout({
   data-secondary-color="#FFEB3C"
   data-button-background-color="transparent"
   data-starting-message="Hello! How can I help you today?"
-  data-logo="/uwp-final.png"
+  data-logo="https://i.imgur.com/rN7Ggf8.png"
   data-user-message-bg-color="#d1fae5"
   data-bot-message-bg-color="#fef3c7">
-</script>
+</script> */}
 
+
+
+<script async
+  src="https://thqi522cuv6kibxn6sbjajml.agents.do-ai.run/static/chatbot/widget.js"
+  data-agent-id="72f2de28-c836-11f0-b074-4e013e2ddde4"
+  data-chatbot-id="Yo1-CHReIBrXlRBDyrNNS7wULAuNKW70"
+  data-name="UWP AI"
+  data-primary-color="#FFEB3C"
+  data-secondary-color="#00AB50"
+  data-button-background-color="#0061EB"
+  data-starting-message="Hello! How can I help you today?"
+  data-logo="https://i.imgur.com/rN7Ggf8.png">
+</script>
         {/* Custom styling for chatbot messages */}
-        <script dangerouslySetInnerHTML={{__html: `
+        {/* <script dangerouslySetInnerHTML={{__html: `
           (function() {
             function styleMessages() {
               // Try to access chatbot widget elements
@@ -75,7 +88,7 @@ export default function RootLayout({
             const observer = new MutationObserver(styleMessages);
             observer.observe(document.body, { childList: true, subtree: true });
           })();
-        `}} />
+        `}} /> */}
       </body>
     </html>
   );
