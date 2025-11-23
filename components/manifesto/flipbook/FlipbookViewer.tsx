@@ -36,7 +36,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   const [loadedChunks, setLoadedChunks] = useState<Set<number>>(new Set());
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const flipBookRef = useRef<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 2000, height: 2400 });
+  const [dimensions, setDimensions] = useState({ width: 900, height: 1200 });
 
   const CHUNK_SIZE = 4;
   const INITIAL_LOAD = 4; // Load first 4 pages immediately
@@ -45,11 +45,13 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   useEffect(() => {
     const updateDimensions = () => {
       const headerHeight = 60;
-      const maxHeight = window.innerHeight - headerHeight;
-      const maxWidthPerPage = window.innerWidth / 2;
+      const maxHeight = window.innerHeight - headerHeight - 20;
+
+      // Make each page much wider - use 45% of screen width per page
+      const maxWidthPerPage = Math.floor(window.innerWidth * 0.45);
 
       setDimensions({
-        width: Math.floor(maxWidthPerPage),
+        width: maxWidthPerPage,
         height: Math.floor(maxHeight)
       });
     };
