@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'uwp-primary': '#1e40af',
-        'uwp-accent': '#3b82f6',
+        'uwp-primary': '#00AB50',
+        'uwp-secondary': '#FFEB3C',
       },
       maxWidth: {
         'page': '1000px',

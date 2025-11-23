@@ -90,7 +90,7 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
       >
         <div className="flex flex-col h-full overflow-hidden">
           <div className="p-6 flex items-center justify-center border-b border-gray-200 flex-shrink-0">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center shadow-lg">
+            <div className="w-24 h-24 bg-gradient-to-br from-uwp-primary to-green-700 rounded-full flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-2xl">UWP</span>
             </div>
           </div>
@@ -129,7 +129,7 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
                       onClick={() => handleItemClick(item.page)}
                       className={`w-full text-left px-3 py-2 rounded-lg transition-colors text-sm ${
                         activePage === item.page
-                          ? 'bg-blue-500 text-white'
+                          ? 'bg-uwp-primary text-white'
                           : 'hover:bg-gray-100 text-gray-700'
                       }`}
                     >

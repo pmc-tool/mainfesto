@@ -51,6 +51,16 @@ function getMatchedSnippet(text: string, query: string, maxLength: number = 80):
       start = Math.max(0, matchLine.length - maxLength);
     }
 
+    // Find the start of the word at 'start' position to avoid starting mid-word
+    if (start > 0) {
+      // Look backwards to find the start of the word or space
+      while (start > 0 && matchLine[start - 1] !== ' ' && start > lineMatchIndex - halfLength - 10) {
+        start--;
+      }
+      // Skip the space if we're at one
+      if (matchLine[start] === ' ') start++;
+    }
+
     let snippet = matchLine.substring(start, end);
     if (start > 0) snippet = '...' + snippet;
     if (end < matchLine.length) snippet = snippet + '...';
@@ -122,7 +132,7 @@ export const SidebarSearch = ({ onSearchChange, onResultClick, pageTexts, search
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder="Search..."
-          className="w-full px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          className="w-full px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-uwp-primary text-sm"
         />
         <svg
           className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -154,31 +164,55 @@ export const SidebarSearch = ({ onSearchChange, onResultClick, pageTexts, search
           <p className="text-xs text-gray-500 mb-2 px-1">
             Found {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}
           </p>
-          <div className="space-y-2">
-            {searchResults.map((pageNumber) => {
-              const sectionTitle = getSectionForPage(pageNumber);
-              const pageText = pageTexts.get(pageNumber) || '';
-              const { snippet, matchIndex } = getMatchedSnippet(pageText, query);
+          <div className="space-y-3">
+            {(() => {
+              // Group results by section
+              const groupedResults: { [section: string]: { pageNumber: number; snippet: string; matchIndex: number }[] } = {};
 
-              if (!snippet) return null;
+              searchResults.forEach((pageNumber) => {
+                const sectionTitle = getSectionForPage(pageNumber) || 'Other';
+                const pageText = pageTexts.get(pageNumber) || '';
+                const { snippet, matchIndex } = getMatchedSnippet(pageText, query);
 
-              return (
-                <button
-                  key={pageNumber}
-                  onClick={() => onResultClick(pageNumber)}
-                  className="w-full text-left px-3 py-2.5 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
-                >
-                  <div className="flex flex-col gap-1.5">
-                    {sectionTitle && (
-                      <span className="text-xs font-semibold text-blue-600">{sectionTitle}</span>
-                    )}
-                    <p className="text-xs text-gray-700 leading-relaxed line-clamp-1">
-                      <HighlightedText text={snippet} query={query} matchIndex={matchIndex} />
-                    </p>
+                if (snippet) {
+                  if (!groupedResults[sectionTitle]) {
+                    groupedResults[sectionTitle] = [];
+                  }
+                  groupedResults[sectionTitle].push({ pageNumber, snippet, matchIndex });
+                }
+              });
+
+              // Sort sections: "Other" goes to the end, rest in original order
+              const sortedEntries = Object.entries(groupedResults).sort(([a], [b]) => {
+                if (a === 'Other') return 1;
+                if (b === 'Other') return -1;
+                return 0;
+              });
+
+              return sortedEntries.map(([sectionTitle, results]) => (
+                <div key={sectionTitle} className="border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
+                    <span className="text-xs font-semibold text-uwp-primary">{sectionTitle}</span>
                   </div>
-                </button>
-              );
-            })}
+                  <div className="divide-y divide-gray-100">
+                    {results.map(({ pageNumber, snippet, matchIndex }) => (
+                      <button
+                        key={pageNumber}
+                        onClick={() => onResultClick(pageNumber)}
+                        className="w-full text-left px-3 py-2 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-400 text-xs mt-0.5">–</span>
+                          <p className="text-xs text-gray-700 leading-relaxed flex-1">
+                            <HighlightedText text={snippet} query={query} matchIndex={matchIndex} />
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()}
           </div>
         </div>
       )}

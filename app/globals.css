@@ -71,4 +71,42 @@
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-500;
   }
+
+  /* AI Chatbot button styling - visual separation from PDF */
+  #chatbot-bubble-button,
+  [class*="chatbot-button"],
+  iframe[src*="chatbot"] + div,
+  div[class*="widget"] button {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 3px #00AB50 !important;
+    border: 3px solid white !important;
+  }
+
+  /* Add "Ask Us" floating text next to chatbot button */
+  #chatbot-bubble-button::before,
+  [class*="chatbot-button"]::before {
+    content: "Ask Us";
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #00AB50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 171, 80, 0.4);
+    white-space: nowrap;
+    pointer-events: none;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: translateY(-50%) scale(1);
+    }
+    50% {
+      transform: translateY(-50%) scale(1.05);
+    }
+  }
 }
