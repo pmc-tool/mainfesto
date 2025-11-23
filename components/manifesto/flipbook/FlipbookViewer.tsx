@@ -55,10 +55,26 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       const totalAvailableWidth = window.innerWidth * (1 - horizontalMarginPercent);
       const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
 
-      // Keep initial large size - don't apply restrictive aspect ratio
+      // Use A4-like aspect ratio (1:1.414) but prioritize size
+      const heightBasedWidth = maxHeight / 1.414;
+      const widthBasedHeight = maxWidthPerPage * 1.414;
+
+      let finalWidth, finalHeight;
+
+      // Use whichever gives LARGER book while respecting aspect ratio
+      if (widthBasedHeight <= maxHeight) {
+        // Width is NOT limiting - use full width
+        finalWidth = maxWidthPerPage;
+        finalHeight = widthBasedHeight;
+      } else {
+        // Height is limiting - use full height
+        finalHeight = maxHeight;
+        finalWidth = heightBasedWidth;
+      }
+
       setDimensions({
-        width: Math.floor(maxWidthPerPage),
-        height: Math.floor(maxHeight)
+        width: Math.floor(finalWidth),
+        height: Math.floor(finalHeight)
       });
     };
 
