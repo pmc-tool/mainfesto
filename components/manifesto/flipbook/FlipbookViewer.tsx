@@ -73,8 +73,8 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       }
 
       setDimensions({
-        width: Math.floor(finalWidth * 1.5),
-        height: Math.floor(finalHeight * 1.5)
+        width: Math.floor(finalWidth),
+        height: Math.floor(finalHeight)
       });
     };
 
@@ -89,7 +89,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
 
     try {
       const page = await pdfProxy.getPage(pageNum);
-      const viewport = page.getViewport({ scale: 3 }); // Higher quality for larger display
+      const viewport = page.getViewport({ scale: 4 }); // Higher quality for larger display
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
 
