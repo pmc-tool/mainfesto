@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { usePdfDocument } from '@/hooks/usePdfDocument';
 import { usePageVisibility } from '@/hooks/usePageVisibility';
 import { PdfViewer } from './pages/PdfViewer';
-import { FlipbookViewer } from './flipbook/FlipbookViewer';
 import { Context } from './Context';
 import { LoadingState } from './LoadingState';
 import { ErrorState } from './ErrorState';
@@ -15,7 +14,6 @@ export const ManifestoReader = () => {
   // Start with sidebar open (will adjust on client side)
   const [isContextOpen, setIsContextOpen] = useState(true);
   const [viewMode, setViewMode] = useState<'single' | 'double' | 'all'>('single');
-  const [displayMode, setDisplayMode] = useState<'pdf' | 'flipbook'>('pdf');
   const [isScrolled, setIsScrolled] = useState(false);
 
   // Adjust sidebar state based on screen size on mount (client-side only)
@@ -157,37 +155,9 @@ export const ManifestoReader = () => {
             {/* Mobile: Right spacer to balance hamburger */}
             <div className="lg:hidden w-10"></div>
 
-            {/* Desktop: Display Mode Toggle + View mode buttons */}
+            {/* Desktop: View mode buttons */}
             <div className="hidden lg:flex items-center gap-4 mx-auto">
-              {/* Display Mode Toggle (PDF/Flipbook) - Desktop Only */}
               <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
-                <button
-                  onClick={() => setDisplayMode('pdf')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                    displayMode === 'pdf'
-                      ? 'bg-uwp-primary text-white'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  aria-label="PDF view"
-                >
-                  PDF
-                </button>
-                <button
-                  onClick={() => setDisplayMode('flipbook')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                    displayMode === 'flipbook'
-                      ? 'bg-uwp-primary text-white'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  aria-label="Flipbook view"
-                >
-                  Flipbook
-                </button>
-              </div>
-
-              {/* View mode buttons (only show in PDF mode) */}
-              {displayMode === 'pdf' && (
-                <div className="flex items-center gap-1 border border-gray-300 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('single')}
                 className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
@@ -222,30 +192,20 @@ export const ManifestoReader = () => {
                 All Pages
               </button>
                 </div>
-              )}
             </div>
           </div>
         </div>
 
-        {displayMode === 'pdf' ? (
-          <PdfViewer
-            pdfProxy={pdfProxy}
-            numPages={pdfDocument.numPages}
-            pageVisibility={pageVisibility}
-            searchResults={[]}
-            viewMode={viewMode}
-            onPageClick={scrollToPage}
-            onViewModeChange={setViewMode}
-            isScrolled={isScrolled}
-          />
-        ) : (
-          <FlipbookViewer
-            pdfProxy={pdfProxy}
-            numPages={pdfDocument.numPages}
-            activePage={pageVisibility.activePage}
-            onPageChange={scrollToPage}
-          />
-        )}
+        <PdfViewer
+          pdfProxy={pdfProxy}
+          numPages={pdfDocument.numPages}
+          pageVisibility={pageVisibility}
+          searchResults={[]}
+          viewMode={viewMode}
+          onPageClick={scrollToPage}
+          onViewModeChange={setViewMode}
+          isScrolled={isScrolled}
+        />
       </div>
     </div>
   );
