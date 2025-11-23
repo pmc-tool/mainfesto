@@ -33,18 +33,20 @@ const FlipbookPage = ({ imageUrl }: { imageUrl: string | null }) => {
 export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }: FlipbookViewerProps) => {
   const [pageImages, setPageImages] = useState<Map<number, string>>(new Map());
   const [currentPage, setCurrentPage] = useState(0);
+  const [loadedChunks, setLoadedChunks] = useState<Set<number>>(new Set());
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const flipBookRef = useRef<any>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 1000 });
+
+  const CHUNK_SIZE = 4;
+  const INITIAL_LOAD = 4; // Load first 4 pages immediately
 
   // Calculate full-screen book dimensions
   useEffect(() => {
     const updateDimensions = () => {
-      // Full screen height minus header and some padding
       const availableHeight = window.innerHeight - 120;
-      // Each page takes half the width (minus sidebar and padding)
-      const availableWidth = (window.innerWidth - 400) / 2; // Accounting for sidebar
+      const availableWidth = (window.innerWidth - 400) / 2;
 
-      // Use A4-like aspect ratio (1:1.414)
       const heightBasedWidth = availableHeight / 1.414;
       const widthBasedHeight = availableWidth * 1.414;
 
@@ -68,41 +70,101 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Load all PDF pages as images
+  // Function to load a specific page
+  const loadPage = async (pageNum: number): Promise<string | null> => {
+    if (!pdfProxy) return null;
+
+    try {
+      const page = await pdfProxy.getPage(pageNum);
+      const viewport = page.getViewport({ scale: 2.5 });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      if (!context) return null;
+
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport,
+      }).promise;
+
+      return canvas.toDataURL();
+    } catch (error) {
+      console.error(`Error loading page ${pageNum}:`, error);
+      return null;
+    }
+  };
+
+  // Function to load a chunk of pages
+  const loadChunk = async (startPage: number, endPage: number) => {
+    const chunkKey = Math.floor(startPage / CHUNK_SIZE);
+
+    // Skip if chunk already loaded
+    if (loadedChunks.has(chunkKey)) return;
+
+    const actualEndPage = Math.min(endPage, numPages);
+    const newImages = new Map<number, string>();
+
+    for (let pageNum = startPage; pageNum <= actualEndPage; pageNum++) {
+      // Skip if page already loaded
+      if (pageImages.has(pageNum)) continue;
+
+      const imageUrl = await loadPage(pageNum);
+      if (imageUrl) {
+        newImages.set(pageNum, imageUrl);
+      }
+    }
+
+    setPageImages(prev => new Map([...prev, ...newImages]));
+    setLoadedChunks(prev => new Set([...prev, chunkKey]));
+  };
+
+  // Load initial pages (first 4)
   useEffect(() => {
     if (!pdfProxy) return;
 
-    const loadAllPages = async () => {
-      const images = new Map<number, string>();
+    const loadInitialPages = async () => {
+      await loadChunk(1, INITIAL_LOAD);
+      setIsInitialLoading(false);
 
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        try {
-          const page = await pdfProxy.getPage(pageNum);
-          const viewport = page.getViewport({ scale: 2.5 });
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-
-          if (!context) continue;
-
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          await page.render({
-            canvasContext: context,
-            viewport: viewport,
-          }).promise;
-
-          images.set(pageNum, canvas.toDataURL());
-        } catch (error) {
-          console.error(`Error loading page ${pageNum}:`, error);
-        }
-      }
-
-      setPageImages(images);
+      // Start loading next chunk in background
+      setTimeout(() => {
+        loadChunk(INITIAL_LOAD + 1, INITIAL_LOAD + CHUNK_SIZE);
+      }, 500);
     };
 
-    loadAllPages();
-  }, [pdfProxy, numPages]);
+    loadInitialPages();
+  }, [pdfProxy]);
+
+  // Load chunks based on current page
+  useEffect(() => {
+    if (isInitialLoading || !pdfProxy) return;
+
+    const currentChunk = Math.floor((currentPage + 1) / CHUNK_SIZE);
+    const nextChunk = currentChunk + 1;
+    const prevChunk = currentChunk - 1;
+
+    // Load current chunk if not loaded
+    const currentStart = currentChunk * CHUNK_SIZE + 1;
+    const currentEnd = currentStart + CHUNK_SIZE - 1;
+    loadChunk(currentStart, currentEnd);
+
+    // Preload next chunk
+    const nextStart = nextChunk * CHUNK_SIZE + 1;
+    const nextEnd = nextStart + CHUNK_SIZE - 1;
+    if (nextStart <= numPages) {
+      setTimeout(() => loadChunk(nextStart, nextEnd), 100);
+    }
+
+    // Preload previous chunk
+    if (prevChunk >= 0) {
+      const prevStart = prevChunk * CHUNK_SIZE + 1;
+      const prevEnd = prevStart + CHUNK_SIZE - 1;
+      setTimeout(() => loadChunk(prevStart, prevEnd), 200);
+    }
+  }, [currentPage, pdfProxy, isInitialLoading]);
 
   const handleFlip = (e: any) => {
     setCurrentPage(e.data);
@@ -121,13 +183,13 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
     }
   };
 
-  if (pageImages.size === 0) {
+  if (isInitialLoading) {
     return (
       <div className="flipbook-loading-screen flex-1 flex items-center justify-center bg-gray-900">
         <div className="text-center">
           <div className="animate-spin rounded-full h-20 w-20 border-b-4 border-uwp-secondary mx-auto mb-6"></div>
           <p className="text-white text-xl">Preparing your book...</p>
-          <p className="text-gray-400 mt-2">Loading {numPages} pages</p>
+          <p className="text-gray-400 mt-2">Loading first pages</p>
         </div>
       </div>
     );
