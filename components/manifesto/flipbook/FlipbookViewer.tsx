@@ -185,12 +185,12 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center overflow-hidden">
+    <div className="w-full h-full overflow-hidden">
       <HTMLFlipBook
         ref={flipBookRef}
         width={dimensions.width}
         height={dimensions.height}
-        size="stretch"
+        size="fixed"
         minWidth={300}
         maxWidth={3000}
         minHeight={400}
@@ -200,8 +200,8 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
         usePortrait={false}
         startPage={0}
         drawShadow={true}
-        className="flipbook-book-element"
-        style={{}}
+        className="flipbook-book-element w-full"
+        style={{ margin: 0, padding: 0 }}
         startZIndex={0}
         autoSize={false}
         maxShadowOpacity={0.8}
