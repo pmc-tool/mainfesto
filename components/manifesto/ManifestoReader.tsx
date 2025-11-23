@@ -15,6 +15,7 @@ export const ManifestoReader = () => {
   const [isContextOpen, setIsContextOpen] = useState(true);
   const [viewMode, setViewMode] = useState<'single' | 'double' | 'all'>('single');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showDownloadBanner, setShowDownloadBanner] = useState(true);
 
   // Adjust sidebar state based on screen size on mount (client-side only)
   useEffect(() => {
@@ -92,6 +93,33 @@ export const ManifestoReader = () => {
       />
 
       <div className="flex-1 flex flex-col relative">
+        {/* Download Banner */}
+        {showDownloadBanner && (
+          <div className="bg-uwp-secondary border-b border-yellow-300 relative">
+            <div className="px-4 py-3 flex items-center justify-center gap-3">
+              <svg className="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <a
+                href="/uwp-manifesto.pdf"
+                download="UWP-Manifesto-2025.pdf"
+                className="text-sm font-medium text-gray-900 hover:underline"
+              >
+                Click here to download the manifesto
+              </a>
+              <button
+                onClick={() => setShowDownloadBanner(false)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-yellow-400 rounded transition-colors"
+                aria-label="Close banner"
+              >
+                <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
           <div className="px-4 py-3 flex items-center justify-between">
             {/* Desktop: Logo when sidebar closed */}
