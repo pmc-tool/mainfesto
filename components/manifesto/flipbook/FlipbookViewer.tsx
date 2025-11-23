@@ -46,13 +46,10 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
     const updateDimensions = () => {
       // Use nearly full height - only leave room for header and bottom bar
       const headerHeight = 60;
-      const bottomBarHeight = 72;
-      const verticalPadding = 5; // Minimal padding
-      const maxHeight = window.innerHeight - headerHeight - bottomBarHeight - verticalPadding;
+      const maxHeight = window.innerHeight - headerHeight;
 
-      // Use MUCH more width - only 2% total margin (1% each side)
-      const horizontalMarginPercent = 0.02; // 2% total margin
-      const totalAvailableWidth = window.innerWidth * (1 - horizontalMarginPercent);
+      // Use full width - no margins
+      const totalAvailableWidth = window.innerWidth;
       const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
 
       // Use A4-like aspect ratio (1:1.414) but prioritize size
@@ -209,7 +206,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="flipbook-fullscreen-container flex-1 flex items-center justify-center bg-black overflow-hidden">
+    <div className="w-screen h-screen flex items-center justify-center overflow-hidden">
       <HTMLFlipBook
         ref={flipBookRef}
         width={dimensions.width}
