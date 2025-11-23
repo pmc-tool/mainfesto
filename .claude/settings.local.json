@@ -20,7 +20,11 @@
       "Bash(lsof:*)",
       "Bash(xargs kill -9)",
       "Bash(README.md)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

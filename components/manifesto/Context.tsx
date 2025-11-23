@@ -23,7 +23,10 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
 
   const handleItemClick = (pageNumber: number) => {
     onPageClick(pageNumber);
-    onClose();
+    // Don't close sidebar on desktop when clicking table of contents
+    if (window.innerWidth < 1024) {
+      onClose();
+    }
   };
 
   const handleSearchChange = (query: string) => {
@@ -33,7 +36,10 @@ export const Context = ({ isOpen, onClose, onToggle, activePage, pageText, onPag
 
   const handleSearchResultClick = (pageNumber: number) => {
     onPageClick(pageNumber);
-    onClose();
+    // Don't close sidebar on desktop when clicking search results
+    if (window.innerWidth < 1024) {
+      onClose();
+    }
   };
 
   const startResizing = (e: React.MouseEvent) => {

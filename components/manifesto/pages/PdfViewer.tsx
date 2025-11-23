@@ -18,10 +18,17 @@ interface PdfViewerProps {
   };
   searchResults?: number[];
   viewMode: ViewMode;
+  onPageClick?: (pageNumber: number) => void;
 }
 
-export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = [], viewMode }: PdfViewerProps) => {
+export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = [], viewMode, onPageClick }: PdfViewerProps) => {
   const [pages, setPages] = useState<PDFPageProxy[]>([]);
+
+  const handlePageClick = (pageNumber: number) => {
+    if (viewMode === 'all' && onPageClick) {
+      onPageClick(pageNumber);
+    }
+  };
 
   useEffect(() => {
     if (!pdfProxy) return;
@@ -95,7 +102,11 @@ export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = 
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {pages.map((page, index) => (
-                <div key={index + 1} className="aspect-[1/1.414]">
+                <div
+                  key={index + 1}
+                  className="aspect-[1/1.414] cursor-pointer transition-transform hover:scale-105"
+                  onClick={() => handlePageClick(index + 1)}
+                >
                   <PdfPage
                     page={page}
                     pageNumber={index + 1}
