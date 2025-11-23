@@ -41,16 +41,19 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   const CHUNK_SIZE = 4;
   const INITIAL_LOAD = 4; // Load first 4 pages immediately
 
-  // Calculate maximum book dimensions for readability
+  // Calculate maximum book dimensions - fill screen completely
   useEffect(() => {
     const updateDimensions = () => {
-      // Maximum height - use almost full screen minus header and bottom bar
-      const totalAvailableHeight = window.innerHeight - 140; // Minimal spacing
-      const maxHeight = totalAvailableHeight * 0.95; // 95% coverage
+      // Use nearly full height - only leave room for header and bottom bar
+      const headerHeight = 60;
+      const bottomBarHeight = 72;
+      const verticalPadding = 10; // Minimal padding
+      const maxHeight = window.innerHeight - headerHeight - bottomBarHeight - verticalPadding;
 
-      // Maximum width - use full width with minimal margins
-      const totalAvailableWidth = window.innerWidth - 50; // Very small margins
-      const maxWidthPerPage = (totalAvailableWidth * 0.95) / 2; // 95% coverage, split for 2 pages
+      // Use nearly full width - minimal margins
+      const horizontalMargin = 20; // Very minimal margins
+      const totalAvailableWidth = window.innerWidth - horizontalMargin;
+      const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
 
       // Use A4-like aspect ratio (1:1.414)
       const heightBasedWidth = maxHeight / 1.414;
@@ -206,9 +209,9 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden">
+    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden p-1">
       {/* Main Book Container */}
-      <div className="flipbook-book-wrapper relative flex items-center justify-center flex-1 w-full">
+      <div className="flipbook-book-wrapper relative flex items-center justify-center flex-1 w-full max-w-full">
         <HTMLFlipBook
           ref={flipBookRef}
           width={dimensions.width}
@@ -245,14 +248,14 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
           ))}
         </HTMLFlipBook>
 
-        {/* Large Navigation Arrows */}
+        {/* Compact Navigation Arrows */}
         <button
           onClick={goToPreviousPage}
           disabled={currentPage === 0}
-          className="flipbook-arrow-left absolute left-4 top-1/2 -translate-y-1/2 z-50 bg-black/50 hover:bg-black/70 disabled:opacity-20 disabled:cursor-not-allowed p-6 rounded-full backdrop-blur-sm transition-all hover:scale-110 border-2 border-white/20"
+          className="flipbook-arrow-left absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-black/60 hover:bg-black/80 disabled:opacity-20 disabled:cursor-not-allowed p-3 rounded-full backdrop-blur-sm transition-all hover:scale-105 border border-white/20"
           aria-label="Previous page"
         >
-          <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -260,41 +263,41 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
         <button
           onClick={goToNextPage}
           disabled={currentPage >= numPages - 1}
-          className="flipbook-arrow-right absolute right-4 top-1/2 -translate-y-1/2 z-50 bg-black/50 hover:bg-black/70 disabled:opacity-20 disabled:cursor-not-allowed p-6 rounded-full backdrop-blur-sm transition-all hover:scale-110 border-2 border-white/20"
+          className="flipbook-arrow-right absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-black/60 hover:bg-black/80 disabled:opacity-20 disabled:cursor-not-allowed p-3 rounded-full backdrop-blur-sm transition-all hover:scale-105 border border-white/20"
           aria-label="Next page"
         >
-          <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
 
-      {/* Bottom Bar with Page Info */}
-      <div className="flipbook-bottom-bar w-full bg-black/80 backdrop-blur-md px-8 py-4 border-t border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-uwp-primary px-6 py-2 rounded-full">
-              <span className="text-white font-bold text-lg">
+      {/* Compact Bottom Bar with Page Info */}
+      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-4 py-2 border-t border-white/10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-uwp-primary px-4 py-1.5 rounded-full">
+              <span className="text-white font-bold">
                 {currentPage + 1} / {numPages}
               </span>
             </div>
-            <span className="text-gray-300 text-sm">
-              Click page corners or use arrows to flip • Drag to turn pages
+            <span className="text-gray-300 text-xs hidden md:inline">
+              Click corners or use arrows • Drag to turn pages
             </span>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               onClick={goToPreviousPage}
               disabled={currentPage === 0}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded-lg transition-colors"
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
             >
-              ← Previous
+              ← Prev
             </button>
             <button
               onClick={goToNextPage}
               disabled={currentPage >= numPages - 1}
-              className="px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded-lg transition-colors"
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white rounded transition-colors text-xs"
             >
               Next →
             </button>
