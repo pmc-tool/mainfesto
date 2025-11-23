@@ -11,13 +11,13 @@ interface FlipbookViewerProps {
   onPageChange: (page: number) => void;
 }
 
-const FlipbookPage = ({ pageNumber, imageUrl }: { pageNumber: number; imageUrl: string | null }) => {
+const FlipbookPage = ({ imageUrl }: { imageUrl: string | null }) => {
   return (
     <div className="flipbook-page-content w-full h-full bg-white flex items-center justify-center">
       {imageUrl ? (
         <img
           src={imageUrl}
-          alt={`Page ${pageNumber}`}
+          alt="Page"
           className="w-full h-full object-contain"
           draggable={false}
         />
@@ -167,7 +167,6 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
           {Array.from({ length: numPages }, (_, i) => i + 1).map((pageNum) => (
             <div key={pageNum} className="flipbook-single-page">
               <FlipbookPage
-                pageNumber={pageNum}
                 imageUrl={pageImages.get(pageNum) || null}
               />
             </div>
