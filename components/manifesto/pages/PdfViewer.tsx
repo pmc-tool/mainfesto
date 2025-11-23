@@ -18,7 +18,7 @@ interface PdfViewerProps {
   };
   searchResults?: number[];
   viewMode: ViewMode;
-  onPageClick?: (pageNumber: number) => void;
+  onPageClick?: (pageNumber: number, switchToSingle?: boolean) => void;
   onViewModeChange?: (mode: ViewMode) => void;
   isScrolled?: boolean;
 }
@@ -27,8 +27,9 @@ export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = 
   const [pages, setPages] = useState<PDFPageProxy[]>([]);
 
   const handlePageClick = (pageNumber: number) => {
-    if (viewMode === 'all' && onPageClick) {
-      onPageClick(pageNumber);
+    if (onPageClick) {
+      // Pass flag to indicate we need to switch to single view mode
+      onPageClick(pageNumber, true);
     }
   };
 
@@ -127,7 +128,11 @@ export const PdfViewer = ({ pdfProxy, numPages, pageVisibility, searchResults = 
                 {group.map((page, pageIndex) => {
                   const pageNumber = groupIndex * 2 + pageIndex + 1;
                   return (
-                    <div key={pageNumber} className="flex-1 max-w-[50%]">
+                    <div
+                      key={pageNumber}
+                      className="flex-1 max-w-[50%] cursor-pointer transition-transform hover:scale-[1.02]"
+                      onClick={() => handlePageClick(pageNumber)}
+                    >
                       <PdfPage
                         page={page}
                         pageNumber={pageNumber}

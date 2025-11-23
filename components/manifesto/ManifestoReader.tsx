@@ -11,20 +11,34 @@ import { ErrorState } from './ErrorState';
 export const ManifestoReader = () => {
   const { document: pdfDocument, pdfProxy, pageTexts, reload } = usePdfDocument();
   const pageVisibility = usePageVisibility();
-  // Open sidebar by default on desktop (>= 1024px), closed on mobile
-  const [isContextOpen, setIsContextOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 1024;
-    }
-    return true; // Default to open for SSR
-  });
+  // Start with sidebar open (will adjust on client side)
+  const [isContextOpen, setIsContextOpen] = useState(true);
   const [viewMode, setViewMode] = useState<'single' | 'double' | 'all'>('single');
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const scrollToPage = (pageNumber: number) => {
-    const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
-    if (pageElement) {
-      pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Adjust sidebar state based on screen size on mount (client-side only)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsContextOpen(false);
+    }
+  }, []);
+
+  const scrollToPage = (pageNumber: number, switchToSingle = false) => {
+    if (switchToSingle && viewMode !== 'single') {
+      // Switch to single view first, then scroll after the view updates
+      setViewMode('single');
+      // Delay scroll to allow view mode to update
+      setTimeout(() => {
+        const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
+        if (pageElement) {
+          pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    } else {
+      const pageElement = document.querySelector(`[data-page-number="${pageNumber}"]`);
+      if (pageElement) {
+        pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
