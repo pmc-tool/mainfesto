@@ -41,6 +41,47 @@
     margin-right: auto;
   }
 
+  /* Flipbook specific styles */
+  .flipbook-container {
+    /* Isolated flipbook container styles */
+  }
+
+  .flipbook-wrapper {
+    /* Isolated flipbook wrapper styles */
+  }
+
+  .flipbook-page-wrapper {
+    /* Isolated page wrapper for flip animations */
+  }
+
+  .flipbook-page {
+    /* Isolated page styles */
+  }
+
+  .flipbook-nav-btn {
+    /* Isolated navigation button styles */
+  }
+
+  .flipbook-counter {
+    /* Isolated counter styles */
+  }
+
+  .flipping .flipbook-page {
+    animation: flipPageAnimation 0.6s ease-in-out;
+  }
+
+  @keyframes flipPageAnimation {
+    0% {
+      transform: rotateY(0deg);
+    }
+    50% {
+      transform: rotateY(-90deg);
+    }
+    100% {
+      transform: rotateY(0deg);
+    }
+  }
+
   /* Smooth scroll container */
   .scroll-container {
     scroll-behavior: smooth;
