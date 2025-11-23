@@ -47,8 +47,8 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       const headerHeight = 60;
       const maxHeight = window.innerHeight - headerHeight - 20;
 
-      // Make each page much wider - use 45% of screen width per page
-      const maxWidthPerPage = Math.floor(window.innerWidth * 0.45);
+      // Make each page use almost half screen - 49% per page = 98% total
+      const maxWidthPerPage = Math.floor(window.innerWidth * 0.49);
 
       setDimensions({
         width: maxWidthPerPage,
