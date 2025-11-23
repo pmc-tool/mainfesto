@@ -44,37 +44,16 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   // Calculate maximum book dimensions - fill screen completely
   useEffect(() => {
     const updateDimensions = () => {
-      // Use nearly full height - only leave room for header and bottom bar
       const headerHeight = 60;
-      const bottomBarHeight = 72;
-      const verticalPadding = 10; // Minimal padding
-      const maxHeight = window.innerHeight - headerHeight - bottomBarHeight - verticalPadding;
+      const bottomBarHeight = 60;
+      const maxHeight = window.innerHeight - headerHeight - bottomBarHeight;
 
-      // Use nearly full width - minimal margins
-      const horizontalMargin = 20; // Very minimal margins
-      const totalAvailableWidth = window.innerWidth - horizontalMargin;
-      const maxWidthPerPage = totalAvailableWidth / 2; // Full width split for 2 pages
-
-      // Use A4-like aspect ratio (1:1.414) but prioritize size
-      const heightBasedWidth = maxHeight / 1.414;
-      const widthBasedHeight = maxWidthPerPage * 1.414;
-
-      let finalWidth, finalHeight;
-
-      // Use whichever gives LARGER book while respecting aspect ratio
-      if (widthBasedHeight <= maxHeight) {
-        // Width is NOT limiting - use full width
-        finalWidth = maxWidthPerPage;
-        finalHeight = widthBasedHeight;
-      } else {
-        // Height is limiting - use full height
-        finalHeight = maxHeight;
-        finalWidth = heightBasedWidth;
-      }
+      const totalAvailableWidth = window.innerWidth;
+      const maxWidthPerPage = totalAvailableWidth / 2;
 
       setDimensions({
-        width: Math.floor(finalWidth * 1.5),
-        height: Math.floor(finalHeight * 1.5)
+        width: Math.floor(maxWidthPerPage),
+        height: Math.floor(maxHeight)
       });
     };
 
@@ -209,7 +188,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
   }
 
   return (
-    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden p-1">
+    <div className="flipbook-fullscreen-container flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black overflow-hidden">
       {/* Main Book Container */}
       <div className="flipbook-book-wrapper relative flex items-center justify-center flex-1 w-full max-w-full">
         <HTMLFlipBook
@@ -273,7 +252,7 @@ export const FlipbookViewer = ({ pdfProxy, numPages, activePage, onPageChange }:
       </div>
 
       {/* Compact Bottom Bar with Page Info */}
-      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-4 py-2 border-t border-white/10">
+      <div className="flipbook-bottom-bar w-full bg-black/90 backdrop-blur-md px-4 py-1.5 border-t border-white/10">
         <div className="max-w-7xl mx-auto flex items-center justify-between text-sm">
           <div className="flex items-center gap-3">
             <div className="bg-uwp-primary px-4 py-1.5 rounded-full">
